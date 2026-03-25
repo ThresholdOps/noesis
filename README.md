@@ -97,6 +97,26 @@ APIs and interfaces should be considered unstable at this stage.
 
 ---
 
+## Public Repo Scope
+
+This public repository is a development, documentation, and services skeleton for NOESIS.
+It does not necessarily include the full VPS, runtime, or operator environment used in real deployments.
+Runtime outputs, infrastructure and ops artifacts, local live configuration, and vendor or world runtime components may be intentionally excluded from git.
+
+---
+
+## Canonical Contract Docs
+
+For current repository truth, start with:
+
+- `PROJECT.md` for system boundary and source-of-truth hierarchy
+- `LAYERS.md` for 32 REALMS governance
+- `docs/telemetry-contract.md` for telemetry v0 and producer direction
+
+The `docs/` bridge notes point back to these root-level contract documents and should not be treated as competing sources of truth.
+
+---
+
 ## Philosophy
 
 Noesis is built around a single guiding idea:
