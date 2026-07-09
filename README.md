@@ -112,8 +112,17 @@ For current repository truth, start with:
 - `PROJECT.md` for system boundary and source-of-truth hierarchy
 - `LAYERS.md` for 32 REALMS governance
 - `docs/telemetry-contract.md` for telemetry v0 and producer direction
+- `docs/adr/` for architecture decision records
 
 The `docs/` bridge notes point back to these root-level contract documents and should not be treated as competing sources of truth.
+
+## Architecture Decisions
+
+Architecture decisions are recorded under `docs/adr/`.
+Current integration boundary:
+
+- TinyMUX read-side observation should use softcode relay plus caller-controlled `@log` payloads.
+- Player-visible transcript parsing is fallback/debug only.
 
 ---
 
