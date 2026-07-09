@@ -1,0 +1,84 @@
+{
+  "case_id": "tinymux-log-to-telemetry-v0-pose-attempt",
+  "status": "expected",
+  "input": {
+    "schema_version": "tinymux.log_event.v0",
+    "event_id": "tmux-map-pose-0001",
+    "timestamp": "2026-07-09T12:10:05Z",
+    "source": "tinymux",
+    "world": "noesis-fixture",
+    "room": {
+      "dbref": "#3",
+      "name": "Room_1"
+    },
+    "actor": {
+      "dbref": "#1",
+      "name": "Wizard"
+    },
+    "event_type": "pose",
+    "text": "Wizard checks the lock and steps back from the door.",
+    "visibility": {
+      "scope": "room",
+      "audience": [
+        "#3"
+      ],
+      "realm": null
+    },
+    "raw": {
+      "verb": "+pose"
+    }
+  },
+  "expected_output": {
+    "schema_version": "noesis.telemetry.v0",
+    "event_id": "telemetry-map-pose-0001",
+    "ts_utc": "2026-07-09T12:10:05Z",
+    "run_id": "mapping-fixture-20260709T121000Z",
+    "seq": 2,
+    "event_type": "POSE_ATTEMPT",
+    "event_phase": "attempt",
+    "producer": {
+      "kind": "mux_emitter",
+      "source": "tinymux",
+      "authoritative": true
+    },
+    "actor": {
+      "dbref": "#1",
+      "name_raw": "Wizard"
+    },
+    "location": {
+      "dbref": "#3",
+      "name_raw": "Room_1"
+    },
+    "raw": {
+      "command_raw": null,
+      "content_raw": "Wizard checks the lock and steps back from the door.",
+      "verb_raw": "+pose",
+      "from_dbref": null,
+      "to_dbref": null,
+      "realm_tx_raw": {
+        "schema_version": "tinymux.log_event.v0",
+        "event_id": "tmux-map-pose-0001",
+        "world": "noesis-fixture",
+        "raw": {
+          "verb": "+pose"
+        }
+      },
+      "realm_rx_raw": null,
+      "realm_context_raw": "noesis-fixture",
+      "perception_context_raw": {
+        "scope": "room",
+        "audience": [
+          "#3"
+        ],
+        "realm": null
+      },
+      "target_raw": null,
+      "error_raw": null
+    }
+  },
+  "notes": [
+    "Maps TinyMUX pose to POSE_ATTEMPT.",
+    "Preserves pose text as raw.content_raw.",
+    "Does not emit computed perceived_by."
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "case_id": "tinymux-log-to-telemetry-v0-enter-move-attempt",
+  "status": "expected",
+  "input": {
+    "schema_version": "tinymux.log_event.v0",
+    "event_id": "tmux-map-enter-0001",
+    "timestamp": "2026-07-09T12:10:10Z",
+    "source": "tinymux",
+    "world": "noesis-fixture",
+    "room": {
+      "dbref": "#10",
+      "name": "North Room"
+    },
+    "actor": {
+      "dbref": "#1",
+      "name": "Wizard"
+    },
+    "event_type": "enter",
+    "text": "Wizard arrives from the south.",
+    "visibility": {
+      "scope": "room",
+      "audience": [
+        "#10"
+      ],
+      "realm": null
+    },
+    "raw": {
+      "from_dbref": "#3",
+      "to_dbref": "#10",
+      "target_raw": "north"
+    }
+  },
+  "expected_output": {
+    "schema_version": "noesis.telemetry.v0",
+    "event_id": "telemetry-map-enter-0001",
+    "ts_utc": "2026-07-09T12:10:10Z",
+    "run_id": "mapping-fixture-20260709T121000Z",
+    "seq": 3,
+    "event_type": "MOVE_ATTEMPT",
+    "event_phase": "attempt",
+    "producer": {
+      "kind": "mux_emitter",
+      "source": "tinymux",
+      "authoritative": true
+    },
+    "actor": {
+      "dbref": "#1",
+      "name_raw": "Wizard"
+    },
+    "location": {
+      "dbref": "#10",
+      "name_raw": "North Room"
+    },
+    "raw": {
+      "command_raw": null,
+      "content_raw": "Wizard arrives from the south.",
+      "verb_raw": "enter",
+      "from_dbref": "#3",
+      "to_dbref": "#10",
+      "realm_tx_raw": {
+        "schema_version": "tinymux.log_event.v0",
+        "event_id": "tmux-map-enter-0001",
+        "world": "noesis-fixture",
+        "raw": {
+          "from_dbref": "#3",
+          "to_dbref": "#10",
+          "target_raw": "north"
+        }
+      },
+      "realm_rx_raw": null,
+      "realm_context_raw": "noesis-fixture",
+      "perception_context_raw": {
+        "scope": "room",
+        "audience": [
+          "#10"
+        ],
+        "realm": null
+      },
+      "target_raw": "north",
+      "error_raw": null
+    }
+  },
+  "notes": [
+    "Maps TinyMUX enter to MOVE_ATTEMPT.",
+    "Uses entered room as telemetry location.",
+    "Preserves movement origin and target when present in TinyMUX raw metadata."
+  ]
+}

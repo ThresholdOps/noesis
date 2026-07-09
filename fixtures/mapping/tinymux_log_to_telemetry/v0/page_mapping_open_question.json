@@ -1,0 +1,43 @@
+{
+  "case_id": "tinymux-log-to-telemetry-v0-page-open-question",
+  "status": "open_question",
+  "input": {
+    "schema_version": "tinymux.log_event.v0",
+    "event_id": "tmux-map-page-0001",
+    "timestamp": "2026-07-09T12:10:15Z",
+    "source": "tinymux",
+    "world": "noesis-fixture",
+    "room": {
+      "dbref": "#3",
+      "name": "Room_1"
+    },
+    "actor": {
+      "dbref": "#1",
+      "name": "Wizard"
+    },
+    "target": {
+      "dbref": "#7",
+      "name": "Archivist"
+    },
+    "event_type": "page",
+    "text": "Please bring the blue notebook.",
+    "visibility": {
+      "scope": "private",
+      "audience": [
+        "#1",
+        "#7"
+      ],
+      "realm": null
+    },
+    "channel": "page",
+    "raw": {
+      "verb": "page"
+    }
+  },
+  "expected_output": null,
+  "notes": [
+    "Telemetry v0 does not define PAGE_ATTEMPT.",
+    "This could map to SAY_ATTEMPT as private speech, to a future PAGE_ATTEMPT, or to another private communication event type.",
+    "The mapping is intentionally unresolved and must not be treated as implemented."
+  ]
+}

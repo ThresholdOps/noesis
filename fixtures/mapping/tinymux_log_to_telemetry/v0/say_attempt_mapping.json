@@ -1,0 +1,84 @@
+{
+  "case_id": "tinymux-log-to-telemetry-v0-say-attempt",
+  "status": "expected",
+  "input": {
+    "schema_version": "tinymux.log_event.v0",
+    "event_id": "tmux-map-say-0001",
+    "timestamp": "2026-07-09T12:10:00Z",
+    "source": "tinymux",
+    "world": "noesis-fixture",
+    "room": {
+      "dbref": "#3",
+      "name": "Room_1"
+    },
+    "actor": {
+      "dbref": "#1",
+      "name": "Wizard"
+    },
+    "event_type": "say",
+    "text": "The street is quiet tonight.",
+    "visibility": {
+      "scope": "room",
+      "audience": [
+        "#3"
+      ],
+      "realm": null
+    },
+    "raw": {
+      "verb": "+nsay"
+    }
+  },
+  "expected_output": {
+    "schema_version": "noesis.telemetry.v0",
+    "event_id": "telemetry-map-say-0001",
+    "ts_utc": "2026-07-09T12:10:00Z",
+    "run_id": "mapping-fixture-20260709T121000Z",
+    "seq": 1,
+    "event_type": "SAY_ATTEMPT",
+    "event_phase": "attempt",
+    "producer": {
+      "kind": "mux_emitter",
+      "source": "tinymux",
+      "authoritative": true
+    },
+    "actor": {
+      "dbref": "#1",
+      "name_raw": "Wizard"
+    },
+    "location": {
+      "dbref": "#3",
+      "name_raw": "Room_1"
+    },
+    "raw": {
+      "command_raw": null,
+      "content_raw": "The street is quiet tonight.",
+      "verb_raw": "+nsay",
+      "from_dbref": null,
+      "to_dbref": null,
+      "realm_tx_raw": {
+        "schema_version": "tinymux.log_event.v0",
+        "event_id": "tmux-map-say-0001",
+        "world": "noesis-fixture",
+        "raw": {
+          "verb": "+nsay"
+        }
+      },
+      "realm_rx_raw": null,
+      "realm_context_raw": "noesis-fixture",
+      "perception_context_raw": {
+        "scope": "room",
+        "audience": [
+          "#3"
+        ],
+        "realm": null
+      },
+      "target_raw": null,
+      "error_raw": null
+    }
+  },
+  "notes": [
+    "Preserves TinyMUX input identity under raw.realm_tx_raw.",
+    "Preserves visibility under raw.perception_context_raw.",
+    "Does not emit computed perceived_by."
+  ]
+}
