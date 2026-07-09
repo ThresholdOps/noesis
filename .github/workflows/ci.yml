@@ -20,5 +20,8 @@ jobs:
       - name: Validate TinyMUX log event fixtures
         run: python3 tests/test_tinymux_log_event_fixtures.py
 
+      - name: Validate telemetry v0 fixtures
+        run: python3 tests/test_telemetry_v0_fixtures.py
+
       - name: Check Python syntax
         run: python3 tests/check_python_syntax.py
