@@ -51,6 +51,8 @@ SUPPORTED_EVENT_TYPES = {
 EXPECTED_FIXTURE_EVENT_TYPES = {
     "SAY_ATTEMPT",
     "MOVE_ATTEMPT",
+    "POSE_ATTEMPT",
+    "ROOM_EMIT",
     "REFUSAL",
     "ERROR",
 }
@@ -65,6 +67,7 @@ SUPPORTED_PHASES = {
 
 EXPECTED_FIXTURE_PHASES = {
     "attempt",
+    "emit",
     "refusal",
     "error",
 }
