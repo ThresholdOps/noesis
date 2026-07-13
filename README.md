@@ -1,142 +1,156 @@
-# Noesis (!)
+# NOESIS
 
-**An engine for persistent worlds where truth is centralized, perception is distributed, and meaning is emergent.**
+**Contract-governed persistent worlds where truth is centralized, perception
+is distributed, and meaning is emergent.**
 
 ---
 
 ## Overview
 
-Noesis is a shared reality engine designed to separate **world truth**, **perception**, and **narrative** into distinct, enforceable layers.
+NOESIS separates a persistent-world system into three replaceable layers:
 
-The core assumption behind Noesis is simple:
+1. a world engine that owns state, rules and mechanical perception;
+2. cognition and narrative services that own memory, retrieval and direction;
+3. interfaces that present authorized projections and submit action intents.
 
-> A world should exist independently of what any single participant can perceive.
+NOESIS is the versioned contract and policy fabric joining those layers. It is
+not an additional source of world truth.
 
-The engine enforces objective state and perception rules, while narrative is treated as a derived and interpretive process — human, AI-driven, or hybrid.
+The core assumption is simple:
 
----
+> A world should exist independently of what any single participant can
+> perceive or believe.
 
-## Core concepts
+## Core Concepts
 
 ### Centralized truth
-The world has a single, authoritative state.
-Facts are validated and enforced by the engine, not by narration or interpretation.
+
+Each deployed world has one authoritative engine. Facts and state transitions
+are validated there, not by narration, model output or client presentation.
 
 ### Distributed perception
-Each entity perceives only a subset of reality.
-Visibility, interaction, and presence are governed by explicit perception rules.
+
+Each entity receives only the subset of state and events it is mechanically
+entitled to perceive. Perception is explicit, auditable data.
+
+### Bounded cognition
+
+Models receive NOESIS-prepared context with provenance and visibility
+decisions. A generated candidate is not a world fact and cannot issue engine
+commands.
 
 ### Emergent meaning
-Narrative is not authored directly by the engine.
-It emerges from the interaction between world state, perception, and interpretation.
 
----
+Memory, belief and narrative meaning are derived from world events, perception,
+canon and interpretation. They do not replace authoritative state.
 
-## Architecture (conceptual)
+## Current Reference Architecture
 
-Noesis is structured around three layers:
+Black Signal selects **SpacetimeDB** as its authoritative world engine.
 
-1. **World layer**  
-   Objective entities, locations, rules, and constraints.
+- **SpacetimeDB / TypeScript** — world state, reducers, authorization,
+  mechanical perception, durable world events and safe projections.
+- **NOESIS services and adapters** — contracts, telemetry normalization,
+  memory, graph/RAG, cognition validation and narrative direction.
+- **Vue** — diagnostic development console.
+- **Unreal Engine / C++** — intended rich player interface.
+- **LLMs** — bounded voices, interpreters and assistants; never arbiters of
+  world truth.
 
-2. **Perception layer**  
-   Mechanisms defining what each entity can see, hear, or interact with.
+TinyMUX remains a legacy and research adapter. Its read-side contracts,
+fixtures, audits and 32 REALMS work remain valid within their declared scope.
 
-3. **Narrative layer**  
-   Interpretation and description of experience, external to the core engine.
+## System Rule
 
-Only the first two layers are enforced by Noesis itself.
+Humans, models, directors, operators and interfaces have no privileged path
+around the world engine.
 
----
+```text
+action intent
+→ authenticated and capability-checked engine path
+→ authoritative action result
+→ committed world event
+→ perception decision
+→ NOESIS memory, cognition and presentation
+```
 
-## Technology stack (current direction)
+## Repository Scope
 
-Noesis is not bound to a single implementation, but the current reference stack includes:
+This repository owns NOESIS architecture, contracts, fixtures, validators,
+adapters and supporting services. It does not necessarily contain every world
+runtime, client asset, deployment secret or operator environment.
 
-- **TinyMUX**  
-  Used as the authoritative world and perception engine (entities, locations, Rx/Tx, reality levels).
+The Black Signal SpacetimeDB implementation lives in:
 
-- **Python**  
-  Integration layer, tooling, orchestration, and external services.
+- https://github.com/ThresholdOps/black-signal
 
-- **Discord**  
-  Primary user-facing interface for interaction and presentation.
+## Canonical Documents
 
-- **AI (LLMs)**  
-  Used as narrators, interpreters, or witnesses of world events — never as arbiters of truth.
+Start with:
 
----
+- `PROJECT.md` — system boundary and source-of-truth hierarchy;
+- `LAYERS.md` — engine-neutral 32 REALMS governance;
+- `docs/telemetry-contract.md` — TinyMUX-compatible telemetry v0;
+- `docs/adr/` — accepted architecture decisions.
 
-## What Noesis is
-
-- A backend engine for persistent, shared worlds  
-- A system where perception is treated as data  
-- A foundation for worlds with hidden layers, partial knowledge, and asymmetrical awareness  
-- A platform for experiences where uncertainty and limited perception are intentional design elements  
-
-## What Noesis is not
-
-- A game engine with predefined mechanics  
-- A chatbot-driven RPG system  
-- A replacement for human or AI narration  
-- A simulation assuming full observability or omniscience  
-
----
-
-## Project status
-
-Noesis is currently in an early exploratory and prototyping phase.
-
-Current focus areas include:
-- defining a stable ontological core,
-- formalizing perception mechanics,
-- validating the separation between truth, perception, and narrative,
-- establishing a reproducible development environment.
-
-APIs and interfaces should be considered unstable at this stage.
-
----
-
-## Public Repo Scope
-
-This public repository is a development, documentation, and services skeleton for NOESIS.
-It does not necessarily include the full VPS, runtime, or operator environment used in real deployments.
-Runtime outputs, infrastructure and ops artifacts, local live configuration, and vendor or world runtime components may be intentionally excluded from git.
-
----
-
-## Canonical Contract Docs
-
-For current repository truth, start with:
-
-- `PROJECT.md` for system boundary and source-of-truth hierarchy
-- `LAYERS.md` for 32 REALMS governance
-- `docs/telemetry-contract.md` for telemetry v0 and producer direction
-- `docs/adr/` for architecture decision records
-
-The `docs/` bridge notes point back to these root-level contract documents and should not be treated as competing sources of truth.
+Conceptual notes and runtime artifacts must not override these documents.
 
 ## Architecture Decisions
 
-Architecture decisions are recorded under `docs/adr/`.
-Current integration boundary:
+- `ADR-0001` — TinyMUX read-side integration through softcode relay and
+  caller-controlled `@log`.
+- `ADR-0002` — engine-neutral NOESIS boundaries and SpacetimeDB as the Black
+  Signal reference world engine.
 
-- TinyMUX read-side observation should use softcode relay plus caller-controlled `@log` payloads.
-- Player-visible transcript parsing is fallback/debug only.
+## Contract Direction
 
----
+The contract method is:
+
+```text
+contract → fixtures → validator → CI → implementation
+```
+
+Current and planned contract families include:
+
+- `noesis.telemetry.v0` — retained TinyMUX compatibility contract;
+- `noesis.world_action.v0` and its authoritative result;
+- `noesis.telemetry.v1` — planned engine-neutral facts and perception;
+- `noesis.npc_context.v0` and `noesis.npc_candidate.v0`;
+- cognition quarantine records;
+- `noesis.canon.v0`.
+
+## What NOESIS Is
+
+- A contract architecture for persistent shared worlds.
+- A system where perception is explicit data.
+- A boundary between world truth, knowledge, interpretation and presentation.
+- A foundation for hidden layers, partial knowledge and asymmetric awareness.
+
+## What NOESIS Is Not
+
+- A chatbot acting as game master and world authority.
+- A presentation layer trusted to protect secrets.
+- A model with direct access to world state or commands.
+- A requirement that every world use the same engine or interface.
+
+## Project Status
+
+NOESIS is in active architectural rebaselining from a TinyMUX-specific
+prototype toward engine-neutral contracts with SpacetimeDB as the Black Signal
+reference implementation.
+
+APIs remain versioned but unstable until their fixtures, validators and CI
+checks establish repository truth.
 
 ## Philosophy
 
-Noesis is built around a single guiding idea:
-
-> A world becomes more believable when it knows more than any of its inhabitants.
-
----
+> A world becomes more believable when it knows more than any of its
+> inhabitants.
 
 ## License
 
 This project is licensed under the **Mozilla Public License 2.0 (MPL-2.0)**.
 
-You are free to use, modify, and distribute this software, including for commercial purposes.  
-Any modifications to MPL-licensed source files must remain open under the same license.
+You may use, modify and distribute the software, including commercially. Any
+modifications to MPL-licensed source files must remain open under the same
+license terms.

@@ -2,79 +2,160 @@
 
 ## Purpose
 
-NOESIS defines the project-level contract for a persistent world where:
+NOESIS defines contract-governed boundaries for persistent worlds where:
 
-- TinyMUX holds authoritative world state
-- perception is enforced against that state
-- telemetry captures factual world-side events for downstream use
-- rendering and AI operate only on derived inputs
+- one selected world engine holds authoritative state and enforces rules;
+- perception limits access to world information;
+- cognition and narrative operate on bounded, derived inputs;
+- interfaces present authorized projections and submit action intents;
+- every boundary is versioned, fixture-tested and CI-enforced.
 
-## System Boundary
+NOESIS is the contract and policy fabric joining the world engine, cognition
+and interfaces. It is not a competing source of world truth.
 
-Inside NOESIS:
+## Current Reference Deployment
 
-- world state and state transitions in TinyMUX
-- realm and perception governance layered on TinyMUX Reality Levels
-- event telemetry capture and storage
-- downstream rendering, presentation, and observability tooling
-- AI and retrieval layers that consume derived data
+Black Signal selects SpacetimeDB as its authoritative world engine.
 
-Outside NOESIS:
+The initial reference stack is:
 
-- human interpretation that attempts to override world truth
-- clients or bots acting as world authority
-- any presentation layer that bypasses world validation or perception limits
+- SpacetimeDB TypeScript module for world state, rules and mechanical
+  perception;
+- NOESIS adapters and services for contracts, telemetry, memory, retrieval,
+  cognition and direction;
+- Vue as a diagnostic client;
+- Unreal Engine as the intended rich client.
+
+TinyMUX remains a legacy and research integration target. Its existing
+contracts are retained within their declared TinyMUX compatibility scope.
+
+## Invariants
+
+### One world authority
+
+The selected world engine is the only authority for mechanically relevant
+state and accepted state transitions.
+
+For Black Signal, SpacetimeDB decides:
+
+- what exists;
+- current entity and location state;
+- who controls an entity;
+- whether an action is legal;
+- what mechanical effects occur;
+- who is mechanically entitled to receive a state projection or event.
+
+### No privileged external actor
+
+A human, model, narrative director, operator and interface follow the same
+contract-governed action boundary. None may write world state directly.
+
+### Candidates are not facts
+
+Model text, retrieval output, operator notes and narrative plans are not world
+facts. They become world events only after validation and acceptance by the
+world engine.
+
+### Perception precedes cognition
+
+The engine determines whether an observer was entitled to receive information
+about an event. NOESIS may derive memory, belief or interpretation only from
+authorized observations and explicit canon sources.
+
+### Presentation is not authority
+
+Vue, Unreal Engine, Discord and other clients render authorized projections.
+They do not enforce secrets as a substitute for server-side access control.
 
 ## Source-of-Truth Hierarchy
 
-1. TinyMUX world state and rule enforcement
-2. repository-level NOESIS contracts in `PROJECT.md`, `LAYERS.md`, and `docs/telemetry-contract.md`
-3. conceptual architecture docs under `docs/`
-4. bridge/runtime artifacts under `out/`
-5. rendering, Discord, and AI outputs
+1. The selected world engine's committed state and accepted world events.
+2. Repository-level NOESIS contracts and accepted ADRs.
+3. Authenticated action results and engine-to-NOESIS mappings.
+4. Observer-specific perception records.
+5. Derived memory, retrieval and narrative state.
+6. Rendering, interface and model output.
 
 If a lower layer conflicts with a higher layer, the higher layer wins.
 
 ## Boundary by Responsibility
 
-### World State
+### World Engine
 
-Belongs to TinyMUX:
+The selected engine owns:
 
-- objects, locations, exits, relations
-- state transitions and refusals
-- authoritative Rx/Tx / Reality Level mechanics
-- any decision about whether an action actually occurred
+- entities, locations, containment and mechanically relevant relations;
+- state transitions, refusals and domain rules;
+- principal identity, control grants and capabilities;
+- mechanical perception and safe projections;
+- durable records of accepted world events;
+- mechanical schedules and timers.
 
-### Telemetry
+For Black Signal these responsibilities belong to SpacetimeDB reducers, tables
+and views.
 
-Belongs to NOESIS observability:
+### Actions
 
-- factual capture of world-side attempts, accepted events, refusals, and emits
-- append-only event records for downstream processing
-- raw fields required for later perception enrichment
+External components submit intent through a versioned world-action contract.
+The engine authenticates the principal, verifies control and capabilities,
+checks state preconditions, applies rules and returns an authoritative result.
 
-Telemetry is not authority. It reports authority.
+Only an accepted action may create world events.
+
+### Telemetry and Chronicle
+
+The engine's durable world-event stream is the factual chronicle.
+
+NOESIS telemetry normalizes that chronicle for downstream consumers while
+preserving order, causation, entity anchors and perception decisions.
+
+Attempted, denied and invalid actions remain action-result or audit data unless
+the world explicitly models the attempt itself as an observable event.
+
+The existing `noesis.telemetry.v0` contract remains a TinyMUX compatibility
+contract. Engine-neutral work proceeds in a new version rather than silently
+changing v0 semantics.
+
+### Perception
+
+Mechanical observability belongs to the world engine. NOESIS consumes explicit
+perception decisions and builds observer-bounded memory and context.
+
+`LAYERS.md` defines the semantic 32 REALMS contract independently of engine
+storage. Implementations may use TinyMUX Reality Levels, SpacetimeDB state or a
+future mechanism without changing realm meaning.
+
+### Cognition and RAG
+
+NOESIS cognition owns:
+
+- memory and retrieval;
+- persona and canon context;
+- provenance and epistemic status;
+- bounded model requests;
+- candidate validation and quarantine.
+
+Models do not read world tables, telemetry files or memory stores directly and
+do not issue engine commands.
+
+### Narrative Direction
+
+The director owns scenes, pacing, plot pressure and proposed NPC initiative.
+It consumes chronicle and narrative state but acts only through legal world
+actions.
+
+### Canon
+
+Authored lore, secrets, biographies and campaign structure live behind a
+future `noesis.canon.v0` ingest boundary. Mechanically relevant projections may
+enter the world engine; presentation assets may enter clients. Shared stable
+identifiers connect the projections.
 
 ### Rendering
 
-Belongs to downstream presentation:
-
-- human-readable projections
-- Discord or other client outputs
-- summaries, formatting, filtering, and localized phrasing
-
-Rendering must not invent world facts or replace perception rules.
-
-### AI / RAG
-
-Belongs to downstream interpretation:
-
-- narrative generation
-- contextual retrieval
-- summarization and explanation
-
-AI / RAG is read-only with respect to world truth.
+Rendering owns human-readable and audiovisual presentation, localization,
+formatting and client interaction. It must not invent authoritative state or
+expand perception rights.
 
 ## Foundational Design Primitives
 
@@ -82,21 +163,31 @@ NOESIS is organized around three primitives:
 
 - Relations are primary.
 - Information is the effect or record of change in relations.
-- Structures define the bounded forms in which relations occur and information becomes legible.
+- Structures define the bounded forms in which relations occur and information
+  becomes legible.
 
 Mapped onto NOESIS:
 
-- TinyMUX provides authoritative structures and the current relational world state.
-- Telemetry is structured capture of relational change.
-- Perception is observer-relative access to information about relational change.
-- Renderer and AI layers are downstream consumers of information, not authors of world truth.
+- the world engine provides authoritative structures and relational state;
+- world events capture committed relational change;
+- perception grants observer-relative access to information about change;
+- cognition derives memory, belief and interpretation;
+- interfaces render authorized projections.
 
-## Why TinyMUX Is Authoritative
+## Engineering Method
 
-NOESIS uses TinyMUX as the authoritative state engine because the current project direction already grounds world state, visibility, and Reality Level mechanics there. NOESIS adds observability, governance, semantics, and downstream rendering contracts on top of that mechanism.
+Every new boundary follows:
 
-In practical terms:
+```text
+contract → fixtures → validator → CI → implementation
+```
 
-- TinyMUX decides what exists and what happened
-- NOESIS defines how that reality is governed, observed, captured, and rendered
-- bridge and AI layers remain downstream and non-authoritative
+Architecture and transport decisions require measured evidence. Transitional
+runtime paths must remain explicitly labeled and must evolve toward repository
+contracts rather than redefining them.
+
+## Governing Decisions
+
+- `ADR-0001` governs the TinyMUX read-side compatibility boundary.
+- `ADR-0002` establishes engine-neutral NOESIS boundaries and selects
+  SpacetimeDB as the Black Signal reference world engine.
